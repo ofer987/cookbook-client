@@ -1,0 +1,78 @@
+upstream restbus_app {
+    # Path to Puma SOCK file, as defined previously
+    server unix:/http/transit.tips/restbus/shared/sockets/puma.sock fail_timeout=0;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    server_name ~^restbus\.transit\.tips localhost/restbus 192.168.8.8/restbus;
+
+    ssl_certificate <%= @ssl_certificate_path %>;
+    ssl_certificate_key <%= @ssl_certificate_key %>;
+
+    root <%= @restbus_path %>
+
+    try_files $uri/index.html $uri @restbus_app;
+
+    location @restbus_app {
+        proxy_pass http://restbus_app;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+
+        set $cors '';
+
+        if ($http_origin ~ '^https://(.+\.)?transit\.tips') {
+                set $cors 'true';
+        }
+
+        if ($cors = 'true') {
+                add_header 'Access-Control-Allow-Origin' "$http_origin";
+                add_header 'Access-Control-Allow-Credentials' 'true';
+                add_header 'Access-Control-Allow-Methods' 'GET';
+                add_header 'Access-Control-Allow-Headers' 'Accept,Cache-Control,Content-Type,Origin,User-Agent';
+        }
+    }
+
+    error_page 500 502 503 504 /500.html;
+    client_max_body_size 4G;
+    keepalive_timeout 10;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name ~^restbus\.transit\.tips localhost/restbus 192.168.8.8/restbus;
+    # return 301 https://$host$request_uri;
+
+    root <%= @restbus_path %>
+
+    try_files $uri/index.html $uri @restbus_app;
+
+    location @restbus_app {
+      proxy_pass http://restbus_app;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+
+      set $cors '';
+
+      if ($http_origin ~ '^https://(.+\.)?transit\.tips') {
+        set $cors 'true';
+      }
+
+      if ($cors = 'true') {
+        add_header 'Access-Control-Allow-Origin' "$http_origin";
+        add_header 'Access-Control-Allow-Credentials' 'true';
+        add_header 'Access-Control-Allow-Methods' 'GET';
+        add_header 'Access-Control-Allow-Headers' 'Accept,Cache-Control,Content-Type,Origin,User-Agent';
+      }
+    }
+
+    error_page 500 502 503 504 /500.html;
+    client_max_body_size 4G;
+    keepalive_timeout 10;
+}
