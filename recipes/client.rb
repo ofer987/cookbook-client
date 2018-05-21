@@ -11,8 +11,22 @@ include_recipe 'nginx::default'
 chef_user = my_root_user
 nginx_user = my_nginx_user
 
-ssl_certificate_path = File.join(chef_user.secrets_path, 'certificates', 'transit.tips.chained.crt')
-ssl_key_path = File.join(chef_user.secrets_path, 'certificates', 'transit.tips.key')
+ssl_certificate_path = File.join(
+  chef_user.secrets_path,
+  'certificates',
+  'transit.tips.chained.crt'
+)
+ssl_key_path = File.join(
+  chef_user.secrets_path,
+  'certificates',
+  'transit.tips.key'
+)
+
+execute 'who am i' do
+  action :run
+  live_stream true
+  command 'whoami'
+end
 
 nginx_site 'client' do
   action :enable
@@ -36,10 +50,13 @@ execute 'install client' do
   action :run
   user chef_user.name
   cwd chef_user.transit_tips_path
-  command "RESTBUS_URL=#{node['transit.tips']['restbus']['public_url']} make install"
+  command "PATH=$PATH:/usr/local/rbenv/shims RESTBUS_URL=#{node['transit.tips']['restbus']['public_url']} \
+    make install"
 end
 
-execute "move clients to nginx's www directory" do
+execute "copy clients to nginx's www directory" do
   action :run
+
+  # Maybe this should be mv?
   command "cp -R #{chef_user.transit_tips_path} #{nginx_user.transit_tips_path}"
 end
