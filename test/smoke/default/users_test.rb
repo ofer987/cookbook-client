@@ -10,6 +10,10 @@ unless os.windows?
   describe user('root'), :skip do
     it { should exist }
   end
+
+  describe user(node['nginx']['user']) do
+    it { should exist }
+  end
 end
 
 # This is an example test, replace it with your own test.
