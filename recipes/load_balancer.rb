@@ -1,10 +1,10 @@
 #
-# Cookbook:: transit.tips
+# Cookbook:: load-balancer
 # Recipe:: default
 #
 # The MIT License (MIT)
 #
-# Copyright:: 2017, Dan Jakob Ofer
+# Copyright:: 2018, Dan Jakob Ofer
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+apt_update 'daily' do
+  frequency 86_400
+  action :periodic
+end
+
 include_recipe 'transit.tips::users'
 include_recipe 'transit.tips::git'
-include_recipe 'transit.tips::nodejs'
-include_recipe 'transit.tips::ruby'
-include_recipe 'transit.tips::client'
+include_recipe 'transit.tips::load_balancer_server'

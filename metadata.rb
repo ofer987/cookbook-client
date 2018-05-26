@@ -4,7 +4,7 @@ maintainer_email 'dan@ofer.to'
 license 'MIT'
 description 'Installs/Configures transit.tips'
 long_description 'Installs/Configures transit.tips'
-version '0.1.3'
+version '0.1.12'
 chef_version '>= 12.1' if respond_to?(:chef_version)
 
 depends 'nginx', '~> 7.0.1'

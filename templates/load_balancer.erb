@@ -1,0 +1,33 @@
+server {
+  listen 443 ssl;
+  ssl_certificate <%= @ssl_certificate_path %>;
+  ssl_certificate_key <%= @ssl_certificate_key %>;
+
+  server_name <%= @client_server_names %>;
+
+  location / {
+    proxy_pass https://<%= @client_ip_address %>;
+    proxy_set_header Host <%= @client_domain %>;
+  }
+}
+
+# server {
+#   listen 443 ssl;
+#   ssl_certificate <%= @ssl_certificate_path %>;
+#   ssl_certificate_key <%= @ssl_certificate_key %>;
+#
+#   server_name <%= @restbus_name %>;
+#
+#   location / {
+#     proxy_pass <%= @restbus_public_url %>;
+#   }
+# }
+
+server {
+  listen 80;
+  listen [::]:80;
+  server_name <%= @client_server_names %>;
+
+  return 301 https://$host$request_uri;
+}
+

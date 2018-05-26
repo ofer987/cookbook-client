@@ -1,6 +1,6 @@
 {
-  "name": "client",
-  "description": "run the web client",
+  "name": "restbus",
+  "description": "run the restbus web app",
   "json_class": "Chef::Role",
   "default_attributes": {
     "chef_client": {
@@ -14,7 +14,7 @@
   "run_list": [
     "recipe[chef-client::default]",
     "recipe[chef-client::delete_validation]",
-    "recipe[transit.tips::client]"
+    "recipe[transit.tips::restbus]"
   ],
   "env_run_lists": {
   }
