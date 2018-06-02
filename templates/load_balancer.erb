@@ -11,17 +11,18 @@ server {
   }
 }
 
-# server {
-#   listen 443 ssl;
-#   ssl_certificate <%= @ssl_certificate_path %>;
-#   ssl_certificate_key <%= @ssl_certificate_key %>;
-#
-#   server_name <%= @restbus_name %>;
-#
-#   location / {
-#     proxy_pass <%= @restbus_public_url %>;
-#   }
-# }
+server {
+  listen 443 ssl;
+  ssl_certificate <%= @ssl_certificate_path %>;
+  ssl_certificate_key <%= @ssl_certificate_key %>;
+
+  server_name <%= @restbus_server_names %>;
+
+  location / {
+    proxy_pass https://<%= @restbus_ip_address %>;
+    proxy_set_header Host <%= @restbus_domain %>;
+  }
+}
 
 server {
   listen 80;

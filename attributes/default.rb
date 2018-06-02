@@ -8,12 +8,10 @@ default['transit.tips']['load_balancer']['domain'] =
 default['transit.tips']['load_balancer']['public_url'] =
   'https://load.transit.tips'
 
-default['transit.tips']['client']['ip_address'] = '159.89.118.174'
 default['transit.tips']['client']['domain'] = 'client.transit.tips'
 default['transit.tips']['client']['public_url'] = 'https://client.transit.tips'
 default['transit.tips']['client']['dir'] = 'client'
 
-default['transit.tips']['restbus']['ip_address'] = 'some_other_value'
 default['transit.tips']['restbus']['domain'] = 'restbus.transit.tips'
 default['transit.tips']['restbus']['public_url'] =
   'https://restbus.transit.tips'

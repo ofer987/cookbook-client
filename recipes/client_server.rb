@@ -58,7 +58,9 @@ execute 'install client' do
   user chef_user.name
   cwd chef_user.client_path
   command <<-COMMAND
-    PATH=$PATH:/usr/local/rbenv/shims make install
+    PATH=$PATH:/usr/local/rbenv/shims \
+    RESTBUS_URL=#{node['transit.tips']['restbus']['public_url']} \
+    make install
   COMMAND
 end
 

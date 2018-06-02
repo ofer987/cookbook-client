@@ -4,23 +4,23 @@
 #
 # Copyright:: 2017, The Authors, All Rights Reserved.
 
-rbenv_system_install 'default' do
-  update_rbenv false
-end
+chef_user = my_chef_user
+ruby_version = '2.4.1'
 
+rbenv_user_install chef_user.name
 rbenv_plugin 'ruby-build' do
   git_url 'https://github.com/rbenv/ruby-build.git'
+  user chef_user.name
 end
-
-rbenv_ruby '2.4.1' do
+rbenv_ruby ruby_version do
+  user chef_user.name
 end
-
-rbenv_global '2.4.1' do
+rbenv_global ruby_version do
+  user chef_user.name
 end
-
 rbenv_gem 'bundler' do
-  rbenv_version '2.4.1'
-end
-
-rbenv_rehash 'default' do
+  version '1.16.2'
+  user chef_user.name
+  rbenv_version ruby_version
+  options '--no-document'
 end

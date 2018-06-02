@@ -3,7 +3,9 @@
 # https://docs.chef.io/libraries.html
 #
 class Chef
+  # Available to recipes
   class Recipe
+    # Information about a user on a node
     class User
       attr_reader :name, :home, :node
 
@@ -21,8 +23,26 @@ class Chef
         File.join(transit_tips_path, 'client')
       end
 
+      def restbus_path
+        File.join(transit_tips_path, 'restbus')
+      end
+
       def secrets_path
         File.join(home, node['secrets']['dir'])
+      end
+
+      def global_rbenv_path
+        File.join(home, '.rbenv-vars')
+      end
+
+      def global_bundle_config_path
+        bundle_dir = File.join(home, '.bundle')
+        unless Dir.exist?(bundle_dir)
+          Dir.mkdir bundle_dir
+          system "chown #{name}:#{name} #{bundle_dir}"
+        end
+
+        File.join(bundle_dir, 'config')
       end
 
       private
@@ -35,7 +55,9 @@ class Chef
     end
 
     def my_nginx_user
-      User.new(node['nginx']['user'], Dir.home(node['nginx']['user']), node)
+      username = node['nginx']['user']
+
+      User.new(username, Dir.home(username), node)
     end
 
     def my_root_user

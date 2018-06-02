@@ -14,7 +14,7 @@ ssl_key_path = File.join(
 )
 
 client_node = search(:node, 'role:client')[0]
-# client_node = search(:node, 'role:restbus')[0]
+restbus_node = search(:node, 'role:restbus')[0]
 
 execute 'client node ip address' do
   action :run
@@ -33,18 +33,28 @@ client_server_names = [
   node['transit.tips']['load_balancer']['domain']
 ]
 
+restbus_server_names = [
+  node['transit.tips']['restbus']['domain']
+]
+
 nginx_site 'load_balancer' do
   action :enable
   name 'load_balancer'
   template 'load_balancer.erb'
   variables(
-    # load_balancer_domain: node['transit.tips']['load_balancer']['url'],
-    # load_balancer_url: node['transit.tips']['load_balancer']['domain'],
+    # client
     client_ip_address: client_node['ipaddress'],
     client_server_names: client_server_names.join(' '),
     client_domain: node['transit.tips']['client']['domain'],
     client_public_url: node['transit.tips']['client']['public_url'],
-    # restbus_public_url: restbus_node['ipaddress'],
+
+    # restbus
+    restbus_ip_address: restbus_node['ipaddress'],
+    restbus_server_names: restbus_server_names.join(' '),
+    restbus_domain: node['transit.tips']['restbus']['domain'],
+    restbus_public_url: node['transit.tips']['restbus']['public_url'],
+
+    # ssl
     ssl_certificate_path: ssl_certificate_path,
     ssl_certificate_key: ssl_key_path
   )

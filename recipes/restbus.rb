@@ -30,6 +30,7 @@ apt_update 'daily' do
 end
 
 include_recipe 'transit.tips::users'
+include_recipe 'transit.tips::global_settings'
 include_recipe 'transit.tips::git'
 include_recipe 'transit.tips::ruby'
 include_recipe 'transit.tips::restbus_server'
