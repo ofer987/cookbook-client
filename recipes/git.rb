@@ -45,33 +45,27 @@ execute "add github.com to #{known_hosts}" do
 end
 
 # transit.tips
-# Update if already exists
-# Ultimately should not mater because deployments should
-# be zero-config
-unless Dir.exist?(chef_user.transit_tips_path)
-  execute 'clone transit.tips' do
-    action :run
-    user chef_user.name
-    command <<-COMMAND
-    git clone #{node['transit.tips']['url']} #{chef_user.transit_tips_path}
-    COMMAND
-  end
+if Dir.exist?(chef_user.transit_tips_path)
+  FileUtils.rm_r(chef_user.transit_tips_path)
+end
+execute 'clone transit.tips' do
+  action :run
+  user chef_user.name
+  command <<-COMMAND
+  git clone #{node['transit.tips']['url']} #{chef_user.transit_tips_path}
+  COMMAND
 end
 
 # Secrets
-# Update if already exists
-# Ultimately should not mater because deployments should
-# be zero-config
-unless Dir.exist?(chef_user.secrets_path)
-  execute 'clone secrets' do
-    action :run
-    user chef_user.name
-    command <<-COMMAND
+FileUtils.rm_r(chef_user.secrets_path) if Dir.exist?(chef_user.secrets_path)
+execute 'clone secrets' do
+  action :run
+  user chef_user.name
+  command <<-COMMAND
     eval `ssh-agent`;
     ssh-add #{rsa_ofer987_key_path};
     git clone #{node['secrets']['url']} #{chef_user.secrets_path}
-    COMMAND
-  end
+  COMMAND
 end
 
 file rsa_ofer987_key_path do
