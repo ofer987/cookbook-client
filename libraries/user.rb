@@ -36,13 +36,7 @@ class Chef
       end
 
       def global_bundle_config_path
-        bundle_dir = File.join(home, '.bundle')
-        unless Dir.exist?(bundle_dir)
-          Dir.mkdir bundle_dir
-          system "chown #{name}:#{name} #{bundle_dir}"
-        end
-
-        File.join(bundle_dir, 'config')
+        File.join(home, '.bundle', 'config')
       end
 
       private

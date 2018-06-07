@@ -1,6 +1,6 @@
 upstream restbus_app {
     # Path to Puma SOCK file, as defined previously
-    server <%= File.join(@restbus_path, 'shared', 'sockets', 'puma.sock') %> fail_timeout=0;
+    server unix:<%= File.join(@restbus_path, 'shared', 'sockets', 'puma.sock') %> fail_timeout=0;
 }
 
 server {
