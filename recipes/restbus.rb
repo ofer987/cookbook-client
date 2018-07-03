@@ -1,6 +1,6 @@
 #
 # Cookbook:: transit.tips
-# Recipe:: default
+# Recipe:: restbus
 #
 # The MIT License (MIT)
 #

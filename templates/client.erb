@@ -12,7 +12,6 @@ server {
   listen [::]:80;
   server_name <%= @server_names %>;
 
-  # return 301 https://$host$request_uri;
-  root <%= @path %>;
+  return 301 https://$host$request_uri;
 }
 

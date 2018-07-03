@@ -1,6 +1,6 @@
 #
 # Cookbook:: transit.tips
-# Recipe:: default
+# Recipe:: client
 #
 # The MIT License (MIT)
 #
@@ -32,4 +32,5 @@ end
 include_recipe 'transit.tips::users'
 include_recipe 'transit.tips::git'
 include_recipe 'transit.tips::nodejs'
+include_recipe 'transit.tips::ruby'
 include_recipe 'transit.tips::client_server'
