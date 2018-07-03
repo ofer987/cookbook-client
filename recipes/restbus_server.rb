@@ -41,6 +41,17 @@ rbenv_script 'install restbus' do
   COMMAND
 end
 
+paths = [
+  "#{chef_user.home}/.rbenv/shims/",
+  '/usr/local/sbin',
+  '/usr/local/bin',
+  '/usr/sbin',
+  '/usr/bin',
+  '/sbin',
+  '/bin',
+  '/usr/games',
+  '/usr/local/games'
+]
 template '/etc/systemd/system/puma.service' do
   source 'puma.service.erb'
   mode '0644'
@@ -48,7 +59,7 @@ template '/etc/systemd/system/puma.service' do
   variables(
     user: chef_user.name,
     wd: chef_user.restbus_path,
-    path: "#{chef_user.home}/.rbenv/shims/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games",
+    path: paths.join(':'),
     command: File.join(chef_user.home, '.rbenv', 'shims', 'bundle'),
     arguments: 'exec puma -C ' +
       File.join(chef_user.restbus_path, 'config', 'puma.rb')
