@@ -20,6 +20,14 @@ platforms:
       size: 1gb
 
 suites:
+  - name: client
+    data_bags_path: test/fixtures/default/data_bags
+    run_list:
+      - recipe[transit.tips::client]
+    verifier:
+      inspec_tests:
+        - test/smoke/default
+    attributes:
   - name: restbus
     data_bags_path: test/fixtures/default/data_bags
     run_list:
@@ -27,4 +35,4 @@ suites:
     verifier:
       inspec_tests:
         - test/smoke/default
-    attributes:
+      attributes:
