@@ -7,7 +7,6 @@
 include_recipe 'nginx::default'
 
 chef_user = my_chef_user
-nginx_user = my_nginx_user
 
 ssl_certificate_path = File.join(
   chef_user.secrets_path,
@@ -19,12 +18,6 @@ ssl_key_path = File.join(
   'certificates',
   'transit.tips.key'
 )
-
-execute 'who am i' do
-  action :run
-  live_stream true
-  command 'echo `whoami`'
-end
 
 server_names = [
   'localhost',
@@ -39,19 +32,6 @@ execute 'which erb live stream' do
   command 'echo `which erb`'
 end
 
-rbenv_script 'info rbenv' do
-  rbenv_version '2.4.1'
-  user chef_user.name
-  code <<-COMMAND
-    echo ' ' >> #{File.join(chef_user.home, 'path.txt')};
-    echo $PATH >> #{File.join(chef_user.home, 'path.txt')};
-    echo `pwd` >> #{File.join(chef_user.home, 'path.txt')};
-    echo `whoami` >> #{File.join(chef_user.home, 'path.txt')};
-    echo `which bundle` >> #{File.join(chef_user.home, 'path.txt')};
-    echo ' ' >> #{File.join(chef_user.home, 'path.txt')};
-  COMMAND
-end
-
 rbenv_script 'install restbus' do
   rbenv_version '2.4.1'
   user chef_user.name
@@ -60,23 +40,6 @@ rbenv_script 'install restbus' do
     make install
   COMMAND
 end
-
-# execute "copy transit.tips to #{nginx_user.name}'s home directory" do
-#   action :run
-#
-#   # Maybe this should be mv?
-#   command <<-COMMAND
-#     cp -R #{chef_user.transit_tips_path} #{nginx_user.transit_tips_path};
-#   COMMAND
-# end
-#
-# execute "change owner of transit.tips to #{nginx_user.name}" do
-#   action :run
-#
-#   command <<-COMMAND
-#     chown -R #{nginx_user.name} #{nginx_user.transit_tips_path};
-#   COMMAND
-# end
 
 template '/etc/systemd/system/puma.service' do
   source 'puma.service.erb'
@@ -112,12 +75,3 @@ nginx_site 'restbus' do
     ssl_certificate_key: ssl_key_path
   )
 end
-
-# restart nginx service
-# execute 'restart nginx server' do
-#   action :run
-#
-#   command <<-COMMAND
-#     service nginx restart;
-#   COMMAND
-# end
