@@ -27,6 +27,10 @@ class Chef
         File.join(transit_tips_path, 'restbus')
       end
 
+      def ttc_notices_path
+        File.join(transit_tips_path, 'ttc_notices')
+      end
+
       def secrets_path
         File.join(home, node['secrets']['dir'])
       end
