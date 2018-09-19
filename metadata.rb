@@ -12,6 +12,7 @@ depends 'git', '~> 8.0.0'
 depends 'nodejs', '~> 5.0.0'
 depends 'ruby_rbenv', '~> 2.0.5'
 depends 'chef-client', '~> 10.0.3'
+depends 'postgresql', '~> 7.1.0'
 
 # The `issues_url` points to the location where issues for this cookbook are
 # tracked.  A `View Issues` link will be displayed on this cookbook's page when
