@@ -16,6 +16,10 @@ ssl_key_path = File.join(
 client_node = search(:node, 'role:client')[0]
 restbus_node = search(:node, 'role:restbus')[0]
 
+client_nodes = get_nodes('client')
+restbus_node = get_nodes('restbus').first
+ttc_notices_node = get_nodes('ttc-notices').first
+
 execute 'client node ip address' do
   action :run
   live_stream true
@@ -37,22 +41,28 @@ restbus_server_names = [
   node['transit.tips']['restbus']['domain']
 ]
 
+ttc_notices_server_names = [
+  node['transit.tips']['ttc_notices']['domain']
+]
+
 nginx_site 'load_balancer' do
   action :enable
   name 'load_balancer'
   template 'load_balancer.erb'
   variables(
+    domain: node['transit.tips']['domain'],
+
     # client
-    client_ip_address: client_node['ipaddress'],
+    client_nodes: client_nodes
     client_server_names: client_server_names.join(' '),
-    client_domain: node['transit.tips']['client']['domain'],
-    client_public_url: node['transit.tips']['client']['public_url'],
 
     # restbus
-    restbus_ip_address: restbus_node['ipaddress'],
+    restbus_node: restbus_node,
     restbus_server_names: restbus_server_names.join(' '),
-    restbus_domain: node['transit.tips']['restbus']['domain'],
-    restbus_public_url: node['transit.tips']['restbus']['public_url'],
+
+    # restbus
+    ttc_notices_node: ttc_notices_node,
+    ttc_notices_server_names: ttc_notices_server_names.join(' '),
 
     # ssl
     ssl_certificate_path: ssl_certificate_path,

@@ -1,5 +1,6 @@
 default['nginx']['server_names_hash_bucket_size'] = '128'
 
+default['transit.tips']['domain'] = 'transit.tips'
 default['transit.tips']['url'] = 'https://github.com/ofer987/transit.tips.git'
 default['transit.tips']['dir'] = 'transit.tips'
 
@@ -16,6 +17,11 @@ default['transit.tips']['restbus']['domain'] = 'restbus.transit.tips'
 default['transit.tips']['restbus']['public_url'] =
   'https://restbus.transit.tips'
 default['transit.tips']['restbus']['dir'] = 'restbus'
+
+default['transit.tips']['ttc_notices']['domain'] = 'ttc_notices.transit.tips'
+default['transit.tips']['ttc_notices']['public_url'] =
+  'https://ttc_notices.transit.tips'
+default['transit.tips']['ttc_notices']['dir'] = 'ttc_notices'
 
 default['secrets']['url'] = 'git@github.com:ofer987/secrets.git'
 default['secrets']['dir'] = 'secrets'

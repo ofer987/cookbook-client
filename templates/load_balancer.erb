@@ -1,34 +1,51 @@
-server {
-  listen 443 ssl;
-  ssl_certificate <%= @ssl_certificate_path %>;
-  ssl_certificate_key <%= @ssl_certificate_key %>;
+http {
+  upstream client_app {
+    <%= @client_nodes.each do |node| %>
+      server <%= "#{node['hostname']}.#{@domain}" %>;
+    <% end %>
+  }
 
-  server_name <%= @client_server_names %>;
+  server {
+    listen 443 ssl;
+    ssl_certificate <%= @ssl_certificate_path %>;
+    ssl_certificate_key <%= @ssl_certificate_key %>;
 
-  location / {
-    proxy_pass https://<%= @client_ip_address %>;
-    proxy_set_header Host <%= @client_domain %>;
+    server_name <%= @client_server_names %>;
+
+    location / {
+      proxy_pass https://client_app;
+    }
+  }
+
+  server {
+    listen 443 ssl;
+    ssl_certificate <%= @ssl_certificate_path %>;
+    ssl_certificate_key <%= @ssl_certificate_key %>;
+
+    server_name <%= @restbus_server_names %>;
+
+    location / {
+      proxy_pass https://<%= "#{@restbus_node['hostname']}.#{@domain}" %>;
+    }
+  }
+
+  server {
+    listen 443 ssl;
+    ssl_certificate <%= @ssl_certificate_path %>;
+    ssl_certificate_key <%= @ssl_certificate_key %>;
+
+    server_name <%= @ttc_notices_server_names %>;
+
+    location / {
+      proxy_pass https://<%= "#{@ttc_notices_node['hostname']}.#{@domain}" %>;
+    }
+  }
+
+  server {
+    listen 80;
+    listen [::]:80;
+    server_name <%= @client_server_names %>;
+
+    return 301 https://$host$request_uri;
   }
 }
-
-server {
-  listen 443 ssl;
-  ssl_certificate <%= @ssl_certificate_path %>;
-  ssl_certificate_key <%= @ssl_certificate_key %>;
-
-  server_name <%= @restbus_server_names %>;
-
-  location / {
-    proxy_pass https://<%= @restbus_ip_address %>;
-    proxy_set_header Host <%= @restbus_domain %>;
-  }
-}
-
-server {
-  listen 80;
-  listen [::]:80;
-  server_name <%= @client_server_names %>;
-
-  return 301 https://$host$request_uri;
-}
-

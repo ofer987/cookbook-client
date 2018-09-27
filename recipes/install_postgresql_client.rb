@@ -8,7 +8,7 @@
 
 chef_user = my_chef_user
 
-postgresql_client_install do
-  version '9.6'
-  port 5432
+execute 'install PostgreSQL development pacakge' do
+  command 'apt-get install -y libpq-dev'
+  user 'root'
 end
