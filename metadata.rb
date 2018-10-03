@@ -4,7 +4,7 @@ maintainer_email 'dan@ofer.to'
 license 'MIT'
 description 'Installs/Configures transit.tips'
 long_description 'Installs/Configures transit.tips'
-version '0.1.58'
+version '0.2.0'
 chef_version '>= 12.1' if respond_to?(:chef_version)
 
 depends 'nginx', '~> 7.0.1'
@@ -12,7 +12,6 @@ depends 'git', '~> 8.0.0'
 depends 'nodejs', '~> 5.0.0'
 depends 'ruby_rbenv', '~> 2.0.5'
 depends 'chef-client', '~> 10.0.3'
-depends 'postgresql', '~> 7.1.0'
 
 # The `issues_url` points to the location where issues for this cookbook are
 # tracked.  A `View Issues` link will be displayed on this cookbook's page when
