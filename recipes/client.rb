@@ -24,6 +24,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+# require 'pry-byebug'
+#
+# results = search("role:client*")
+# puts results
+#
+# File.write("#{ENV['HOME']}/simple.txt", "hello")
+# File.write("#{ENV['HOME']}/details.txt", Chef::Config)
+# File.write("#{ENV['HOME']}/ancestors.txt", Chef::Config.ancestors)
+
 apt_update 'daily' do
   frequency 86_400
   action :periodic

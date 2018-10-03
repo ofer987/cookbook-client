@@ -13,22 +13,22 @@ ssl_key_path = File.join(
   'transit.tips.key'
 )
 
-client_node = search(:node, 'role:client')[0]
-restbus_node = search(:node, 'role:restbus')[0]
+# client_node = search(:node, 'role:client')[0]
+# restbus_node = search(:node, 'role:restbus')[0]
 
-client_nodes = get_nodes('client')
+client_nodes = get_nodes('restbus')
 restbus_node = get_nodes('restbus').first
-ttc_notices_node = get_nodes('ttc-notices').first
+ttc_notices_node = get_nodes('restbus').first
 
-execute 'client node ip address' do
-  action :run
-  live_stream true
-  command <<-COMMAND
-    echo #{client_node};
-    echo #{client_node.class};
-    echo #{client_node['ipaddress']};
-  COMMAND
-end
+# execute 'client node ip address' do
+#   action :run
+#   live_stream true
+#   command <<-COMMAND
+#     echo #{client_node};
+#     echo #{client_node.class};
+#     echo #{client_node['ipaddress']};
+#   COMMAND
+# end
 
 client_server_names = [
   'localhost',
@@ -53,7 +53,7 @@ nginx_site 'load_balancer' do
     domain: node['transit.tips']['domain'],
 
     # client
-    client_nodes: client_nodes
+    client_nodes: client_nodes,
     client_server_names: client_server_names.join(' '),
 
     # restbus

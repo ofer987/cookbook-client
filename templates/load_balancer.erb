@@ -1,6 +1,6 @@
 http {
   upstream client_app {
-    <%= @client_nodes.each do |node| %>
+    <% @client_nodes.each do |node| %>
       server <%= "#{node['hostname']}.#{@domain}" %>;
     <% end %>
   }
